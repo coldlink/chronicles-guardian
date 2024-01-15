@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  quartz:
+    build:
+      context: .
+      target: run
+      args:
+        - DRIVE_FOLDER_ID=${DRIVE_FOLDER_ID}
+        - SERVICE_ACCOUNT=${SERVICE_ACCOUNT}
+    ports:
+      - 8081:8081
+    environment:
+      - DRIVE_FOLDER_ID=${DRIVE_FOLDER_ID}
+      - SERVICE_ACCOUNT=${SERVICE_ACCOUNT}
