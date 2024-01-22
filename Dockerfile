@@ -24,16 +24,17 @@ RUN echo "install drive-google... done"
 RUN echo "configure drive-google..."
 RUN echo $SERVICE_ACCOUNT > /usr/src/app/service-account.json
 RUN ~/go/bin/drive init --service-account-file /usr/src/app/service-account.json ~/gdrive
-RUN cd ~/gdrive && ~/go/bin/drive pull -hidden -no-prompt -ignore-conflict -id $DRIVE_FOLDER_ID
+RUN cd ~/gdrive && ~/go/bin/drive pull -hidden -id $DRIVE_FOLDER_ID
 RUN echo "configure drive-google... done"
 RUN echo "setting up cron job..."
-RUN echo "0 * * * * cd ~/gdrive && ~/go/bin/drive pull -hidden -no-prompt -ignore-conflict -id $DRIVE_FOLDER_ID $DRIVE_FOLDER_ID && cd /usr/src/app && npx quartz build" > /etc/crontabs/root
+RUN echo "0 * * * * echo \"checking and pulling files...\" && cd ~/gdrive && ~/go/bin/drive pull -hidden -id $DRIVE_FOLDER_ID && echo \"checking and pulling files... done\" && echo \"rebuilding project...\" && cd /usr/src/app && npx quartz build && cp -TR public server && echo \"rebuilding project... done\"" > /etc/crontabs/root
 RUN echo "setting up cron job... done"
 RUN echo "setting up symbolic link..."
 RUN ln -s ~/gdrive/The\ Fey\ Isles/Chronicles\ of\ the\ Guardians /usr/src/app/content
 RUN echo "setting up symbolic link... done"
 RUN echo "running initial build..."
 RUN npx quartz build
+RUN cp -TR public server
 RUN echo "running initial build... done"
 RUN chmod +x /usr/src/app/docker-start.sh
 EXPOSE 8081
