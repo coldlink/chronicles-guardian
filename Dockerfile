@@ -27,7 +27,7 @@ RUN ~/go/bin/drive init --service-account-file /usr/src/app/service-account.json
 RUN cd ~/gdrive && ~/go/bin/drive pull -hidden -id $DRIVE_FOLDER_ID
 RUN echo "configure drive-google... done"
 RUN echo "setting up cron job..."
-RUN echo "0 * * * * echo \"checking and pulling files...\" && cd ~/gdrive && ~/go/bin/drive pull -hidden -id $DRIVE_FOLDER_ID && echo \"checking and pulling files... done\" && echo \"rebuilding project...\" && cd /usr/src/app && npx quartz build && cp -TR public server && echo \"rebuilding project... done\"" > /etc/crontabs/root
+RUN echo "*/30 * * * * echo \"checking and pulling files...\" && cd ~/gdrive && ~/go/bin/drive pull -hidden -id $DRIVE_FOLDER_ID && echo \"checking and pulling files... done\" && echo \"rebuilding project...\" && cd /usr/src/app && npx quartz build && cp -TR public server && echo \"rebuilding project... done\"" > /etc/crontabs/root
 RUN echo "setting up cron job... done"
 RUN echo "setting up symbolic link..."
 RUN ln -s ~/gdrive/The\ Fey\ Isles/Chronicles\ of\ the\ Guardians /usr/src/app/content
